@@ -2,12 +2,12 @@
 
 namespace Jason\Address\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Jason\Address\Contracts\Addressbook;
 use Jason\Address\Scopes\OrderScope;
 use Jason\Address\Traits\Addressable;
 use Jason\Address\Traits\HasArea;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Address extends Model implements Addressbook
 {
@@ -33,7 +33,7 @@ class Address extends Model implements Addressbook
     /**
      * Notes: 关联用户
      * @Author: <C.Jason>
-     * @Date: 2019/11/19 3:34 下午
+     * @Date  : 2019/11/19 3:34 下午
      * @return mixed
      */
     public function user()
@@ -44,14 +44,15 @@ class Address extends Model implements Addressbook
     /**
      * Notes: 将地址设置为默认地址
      * @Author: <C.Jason>
-     * @Date: 2019/11/19 3:31 下午
+     * @Date  : 2019/11/19 3:31 下午
      */
     public function setDefault()
     {
         Address::where('user_id', $this->user_id)->update(['def' => 0]);
 
-        $this->def = 1;
-        $this->save();
+        $address      = $this->refresh();
+        $address->def = 1;
+        $address->save();
 
         return true;
     }
