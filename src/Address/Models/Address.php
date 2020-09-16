@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Address extends Model implements Addressbook
 {
 
-    use Addressable, HasArea, SoftDeletes;
+    use Addressable, HasArea;
 
     /**
      * @var array

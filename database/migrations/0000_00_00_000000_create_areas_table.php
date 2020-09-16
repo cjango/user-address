@@ -9,7 +9,6 @@ class CreateAreasTable extends Migration
 
     /**
      * Run the migrations.
-     *
      * @return void
      */
     public function up()
@@ -17,16 +16,12 @@ class CreateAreasTable extends Migration
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('parent_id')->index();
-            $table->string('code', 10);
             $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
      * @return void
      */
     public function down()
