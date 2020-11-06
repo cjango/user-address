@@ -16,6 +16,10 @@ class Address extends Model implements Addressbook
         HasArea,
         SoftDeletes;
 
+    protected $casts = [
+        'is_default' => 'boolean',
+    ];
+
     /**
      * @var array
      */
@@ -28,6 +32,38 @@ class Address extends Model implements Addressbook
     {
         parent::boot();
         static::addGlobalScope(new OrderScope);
+
+        /**
+         * 如果当前地址为默认地址，取消其他地址的默认地址设置
+         */
+        self::saving(function ($model) {
+            if ($model->is_default && $model->id) {
+                Address::where('id', '<>', $model->id)
+                       ->where('user_id', $model->user_id)
+                       ->where('is_default', 1)
+                       ->update(['is_default' => 0]);
+            } else {
+                Address::where('user_id', $model->user_id)
+                       ->where('is_default', 1)
+                       ->update(['is_default' => 0]);
+            }
+        });
+    }
+
+    /**
+     * Notes: 保存默认地址时转换格式,非0的都转换成0
+     * @Author: <C.Jason>
+     * @Date  : 2020/11/5 5:23 下午
+     * @param $value
+     * @return mixed
+     */
+    protected function setIsDefaultAttribute($value)
+    {
+        if (strtolower($value) === 'false' || $value === '0') {
+            return $this->attributes['is_default'] = 0;
+        } else {
+            return $this->attributes['is_default'] = !!$value;
+        }
     }
 
     /**
@@ -48,13 +84,8 @@ class Address extends Model implements Addressbook
      */
     public function setDefault()
     {
-        Address::where('user_id', $this->user_id)->update(['def' => 0]);
-
-        $address      = $this->refresh();
-        $address->def = 1;
-        $address->save();
-
-        return true;
+        $this->is_default = 1;
+        $this->save();
     }
 
 }

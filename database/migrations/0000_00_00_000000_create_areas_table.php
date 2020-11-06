@@ -17,6 +17,7 @@ class CreateAreasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('parent_id')->index();
             $table->string('name');
+            $table->boolean('depth');
         });
     }
 

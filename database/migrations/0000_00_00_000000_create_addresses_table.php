@@ -9,7 +9,6 @@ class CreateAddressesTable extends Migration
 
     /**
      * Run the migrations.
-     *
      * @return void
      */
     public function up()
@@ -19,11 +18,11 @@ class CreateAddressesTable extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->string('name', 32);
             $table->string('mobile', 32);
-            $table->unsignedInteger('province_id')->index();
-            $table->unsignedInteger('city_id')->index();
-            $table->unsignedInteger('district_id')->index();
+            $table->unsignedInteger('province_id');
+            $table->unsignedInteger('city_id');
+            $table->unsignedInteger('district_id');
             $table->string('address');
-            $table->unsignedTinyInteger('def')->default(0)->index();
+            $table->boolean('is_default')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,7 +30,6 @@ class CreateAddressesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
      * @return void
      */
     public function down()

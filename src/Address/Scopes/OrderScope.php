@@ -18,7 +18,7 @@ class OrderScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->orderBy('def', 'desc')->orderBy('id', 'desc');
+        $builder->orderBy('is_default', 'desc')->orderBy('id', 'desc');
     }
 
 }
